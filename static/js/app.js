@@ -24,13 +24,34 @@ function optionChanged(input) {
         var otuids = labelData.otu_ids.slice(0, 10).map(id => `OTU ${id}`)
         var otuLabels = labelData.otu_labels.slice(0, 10)
         console.log(otuLabels)
-        var data = [{
+        var trace1 = [{
             x: sampleValues,
             y: otuids,
+            text: otuLabels,
             type: "bar",
             orientation: "h"
         }]
-        
-        Plotly.newPlot("bar", data)
+
+        var layout = {
+            title: "Top 10 OTUs Present"
+        }
+
+        var trace2 = {
+            x: otuids,
+            y: sampleValues,
+            text: otuLabels,
+            marker: {
+                size: sampleValues,
+                colors: otuids
+            }
+        }
+
+        var layout2 = {
+            title: "Concentrations of OTUs"
+        }
+
+        Plotly.newPlot("bar", trace1, layout)
+
+        Plotly.newPlot("bubble", trace2, layout2)
     });
 }
