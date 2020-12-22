@@ -21,7 +21,7 @@ function optionChanged(input) {
         });
         var labelData = data.samples.filter(d => d.id == input)[0]
         // console.log(labelData)
-        var sampleValues = labelData.sample_values.slice(0, 10)
+        var sampleValues = labelData.sample_values.slice(0, 10).reverse()
         var otuids = labelData.otu_ids.slice(0, 10).map(id => `OTU ${id}`)
         var otuLabels = labelData.otu_labels.slice(0, 10)
 
@@ -41,19 +41,16 @@ function optionChanged(input) {
             title: "Top 10 OTUs Present"
         }
 
-        var trace2 = {
-            x: metadata.otu_ids,
-            y: metadata.sample_values,
-
+        var trace2 = [{
+            x: labelData.otu_ids,
+            y: labelData.sample_values,
             mode: "markers",
             marker: {
-                sizeref: 2.0 * Math.max(...size) / (desired_maximum_size**2),
-                sizemode: 'area',
-                colors: metadata.otu_ids
+                size: labelData.sample_values,
+                color: labelData.otu_ids
             },
-            text: metadata.otu_labels,
-            colorscale: Earth
-        }
+            text: labelData.otu_labels,
+        }]
 
         var layout2 = {
             title: "Concentrations of OTUs"
