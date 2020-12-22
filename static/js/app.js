@@ -15,6 +15,7 @@ function optionChanged(input) {
         // console.log(data);
         var metadata = data.metadata.filter(d => d.id == input)[0]
         // console.log(metadata)
+        d3.select("#sample-metadata").html("")
         Object.entries(metadata).forEach(([key, value]) => {
             d3.select("#sample-metadata").append("h5").text(`${key}: ${value}`)
         });
@@ -23,6 +24,10 @@ function optionChanged(input) {
         var sampleValues = labelData.sample_values.slice(0, 10)
         var otuids = labelData.otu_ids.slice(0, 10).map(id => `OTU ${id}`)
         var otuLabels = labelData.otu_labels.slice(0, 10)
+
+        var desired_maximum_size = 100
+        var size = [40, 60, 80, 100]
+
         console.log(otuLabels)
         var trace1 = [{
             x: sampleValues,
@@ -37,13 +42,17 @@ function optionChanged(input) {
         }
 
         var trace2 = {
-            x: otuids,
-            y: sampleValues,
-            text: otuLabels,
+            x: metadata.otu_ids,
+            y: metadata.sample_values,
+
+            mode: "markers",
             marker: {
-                size: sampleValues,
-                colors: otuids
-            }
+                sizeref: 2.0 * Math.max(...size) / (desired_maximum_size**2),
+                sizemode: 'area',
+                colors: metadata.otu_ids
+            },
+            text: metadata.otu_labels,
+            colorscale: Earth
         }
 
         var layout2 = {
